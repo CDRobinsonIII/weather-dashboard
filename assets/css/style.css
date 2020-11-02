@@ -1,0 +1,21 @@
+.sidebar {
+    background-color: aqua;
+    height: 500px;
+}
+
+.currentStats {
+    background-color: rgb(108, 86, 233);
+    height: 275px;
+}
+
+.fiveDayStats {
+    background-color:rgb(197, 195, 191);
+    height: 225px;
+}
+
+.dashBoardTitle {
+    font-size: 35px;
+    background-color: rgb(78, 74, 74);
+    text-align: center;
+    color: white;
+}
