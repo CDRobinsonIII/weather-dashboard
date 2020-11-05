@@ -27,7 +27,7 @@ function renderCitySearchHistory () {
             // Create a var to attach the city name to the input tag variable. 
             var inputCity = cityHistoryListInput.addClass("form-control historyCityClick").text(citySearchHistoryList[i]);
 
-            // Append the city name entered by the user to the city history list form. 
+            // Append the city name from local storage to the city history list. 
             $(".city-history").append(inputCity);
         }
     }
@@ -36,6 +36,9 @@ function renderCitySearchHistory () {
     else {
         return;
     }
+    // Call getCurrentWeather function to render last city in the city search list array to the current weather dashboard.
+    getCurrentWeather (citySearchHistoryList[citySearchHistoryList.length-1]);
+
 }
 
 // Function to an add city to the citySearchHistoryList array. 
@@ -68,14 +71,14 @@ if ($(".nameOfCity").val()!=="") {
     var positionInArray = (citySearchHistoryList.length-1);
     console.log("This is the index of the citySearchHistoryList array: " +positionInArray);
 
-    // Create an input tag to attach the new city to. To append to the city history list.
-    var cityHistoryListInput = $('<button>');
+    // Create an button tag to attach the new city to. To append to the city history list.
+    var cityHistoryListBtn = $('<button>');
 
-    // Create a var to attach the city name to the input tag variable. 
-    var inputCity = cityHistoryListInput.addClass("form-control historyCityClick").text(addCitytoList);
+    // Create a var to attach the city name to the button tag variable. 
+    var buttonCity = cityHistoryListBtn.addClass("form-control historyCityClick").text(addCitytoList);
 
-    // Append the city name entered by the user to the city history list form. 
-    $(".city-history").append(inputCity);
+    // Append the city name entered by the user to the city history list. 
+    $(".city-history").append(buttonCity);
 
     // Test to see if how long 
     console.log("This is the city that way added to the city search history list array. " +citySearchHistoryList[positionInArray]);
