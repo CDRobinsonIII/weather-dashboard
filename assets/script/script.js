@@ -5,6 +5,34 @@ function storageCitySearchHistory () {
     localStorage.setItem("citySearchHistoryList", JSON.stringify(citySearchHistoryList));
 }
 
+// Function to see if there are any cities in the city search history stored in the local storage.
+function renderCitySearchHistory () {
+
+    // Retrieve stored city search history from local storage.
+    var getStoredCities = JSON.parse(localStorage.getItem("citySearchHistoryList"));
+
+    // If there are cities in local storage, render them to the city history list.
+    if (getStoredCities !== null) {
+        citySearchHistoryList = getStoredCities;
+        for (i=0; i < citySearchHistoryList.length; i++) {
+        
+            // Create an button tag to attach the new city to. To append to the city history list.
+            var cityHistoryListInput = $('<button>');
+
+            // Create a var to attach the city name to the input tag variable. 
+            var inputCity = cityHistoryListInput.addClass("form-control historyCityClick").text(citySearchHistoryList[i]);
+
+            // Append the city name entered by the user to the city history list form. 
+            $(".city-history").append(inputCity);
+        }
+    }
+    
+    // If there are no cities in local storage, this else will end the function.
+    else {
+        return;
+    }
+}
+
 // Function to an add city to the citySearchHistoryList array. 
 function addCitytoList(event) {
 
@@ -59,6 +87,9 @@ else {
 }
 
 }
+
+// Render and cities stored in local storage before you add more cities to the city search history list. 
+renderCitySearchHistory();
 
 // Create an add event listener for when user enters a city in the search box. Call the function addCitytoList to add the city to the citySearchHistoryList array.
 $(".add-city").on("click", addCitytoList);
