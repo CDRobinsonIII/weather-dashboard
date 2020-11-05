@@ -163,5 +163,7 @@ $(document).on("click", ".historyCityClick", function() {
 
     // Find out which city in the search history list was clicked on.
     var theOne = $(this).text();
-    console.log("No way: " +theOne);
+
+    // Call getCurrentWeather function to display current weather on the dashboard for the city that was clicked on in the history list.
+    getCurrentWeather(theOne);
 });
