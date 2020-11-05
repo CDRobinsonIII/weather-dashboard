@@ -1,5 +1,10 @@
 var citySearchHistoryList = [];
 
+// Function to storage city search history to local storage. 
+function storageCitySearchHistory () {
+    localStorage.setItem("citySearchHistoryList", JSON.stringify(citySearchHistoryList));
+}
+
 // Function to an add city to the citySearchHistoryList array. 
 function addCitytoList(event) {
 
@@ -8,6 +13,12 @@ event.preventDefault ();
 
 // If user enters any characters in the search box, then the code inside is processed.
 if ($(".nameOfCity").val()!=="") {
+
+    var getStoredCities = JSON.parse(localStorage.getItem("citySearchHistoryList"));
+
+    if (getStoredCities !== null) {
+        citySearchHistoryList = getStoredCities;
+    }
 
     // This clears the city search history so that we can append the new city to the list without adding continuously adding to the list. 
     // $(".city-history").empty();
@@ -38,6 +49,8 @@ if ($(".nameOfCity").val()!=="") {
 
     // Clear the search box of the entered city name. 
     $(".nameOfCity").val("");
+
+    storageCitySearchHistory ();
 }
 
 // If user doesn't enter anything before it clicks on the search It exits the function with the else/return so user can input another city.
