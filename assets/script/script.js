@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */ 
+
 // Create an empty array var to hold the cities from the city search history list.
 var citySearchHistoryList = [];
 
@@ -113,16 +115,14 @@ function getCurrentWeather (addCitytoList) {
     // Display in current weather display using class currentTemp.
     $(".currentCity").text(tempName);
 
+    // Use the moment object along with the format method to display the current day in the current weather section of dashboard.
+    $(".currentDate").text(moment().format('L'));
+
     // Get current weather condition icon from object.
     var tempWeatherIconId = response.weather[0].icon;
     var tempWeatherIconIdLink = `http://openweathermap.org/img/wn/${tempWeatherIconId}@2x.png`
     // Display in current weather icon display using class currentWeatherIcon.
     $(".currentWeatherIcon").attr("src",tempWeatherIconIdLink);
-
-    // Get city name from object 
-    var tempDate = response.dt;
-    // Display in current weather display using class currentTemp.
-    $(".currentDate").text(tempDate);
 
     // Get temperature from object. No need to convert from kelvin since we added the imperial unit in the queryURL.
     var tempCurrent = response.main.temp;
