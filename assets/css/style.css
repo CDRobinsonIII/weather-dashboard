@@ -19,3 +19,38 @@
     text-align: center;
     color: white;
 }
+
+.currentCity {
+    font-size: 30px;
+    color:white;
+}
+
+.currentDate {
+    font-size: 30px;
+    color:white;
+}
+
+.currentWeatherIcon {
+    font-size: 30px;
+    color:white;
+}
+
+.currentTemp {
+    font-size: 15px;
+    color:white;
+}
+
+.currentHumidity {
+    font-size: 15px;
+    color:white;
+}
+
+.currentWindSpeed {
+    font-size: 15px;
+    color:white;
+}
+
+.currentHeatIndex {
+    font-size: 15px;
+    color:white;
+}

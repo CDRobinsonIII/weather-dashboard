@@ -1,3 +1,4 @@
+// Create an empty array var to hold the cities from the city search history list.
 var citySearchHistoryList = [];
 
 // Function to storage city search history to local storage. 
@@ -14,6 +15,8 @@ function renderCitySearchHistory () {
     // If there are cities in local storage, render them to the city history list.
     if (getStoredCities !== null) {
         citySearchHistoryList = getStoredCities;
+
+        // Loop through the stored cities and render them in the city search history list.
         for (i=0; i < citySearchHistoryList.length; i++) {
         
             // Create an button tag to attach the new city to. To append to the city history list.
@@ -79,6 +82,7 @@ if ($(".nameOfCity").val()!=="") {
     $(".nameOfCity").val("");
 
     storageCitySearchHistory ();
+    getCurrentWeather (addCitytoList);
 }
 
 // If user doesn't enter anything before it clicks on the search It exits the function with the else/return so user can input another city.
@@ -88,7 +92,64 @@ else {
 
 }
 
-// Render and cities stored in local storage before you add more cities to the city search history list. 
+function getCurrentWeather (addCitytoList) {
+
+    // This is our API key. Add your own API key between the ""
+    var APIKey = "e26d4a663d05cc95479493f79a86a25d";
+
+    // Here we are building the URL we need to query the database
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+addCitytoList+"&units=imperial&appid&appid=" + APIKey;
+
+    // We then created an AJAX call
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    })
+    .then(function(response) {
+        console.log(response);
+
+    // Get city name from object 
+    var tempName = response.name;
+    // Display in current weather display using class currentTemp.
+    $(".currentCity").text(tempName);
+
+    // Get current weather condition icon from object.
+    var tempWeatherIconId = response.weather[0].icon;
+    var tempWeatherIconIdLink = `http://openweathermap.org/img/wn/${tempWeatherIconId}@2x.png`
+    // Display in current weather icon display using class currentWeatherIcon.
+    $(".currentWeatherIcon").attr("src",tempWeatherIconIdLink);
+
+    // Get city name from object 
+    var tempDate = response.dt;
+    // Display in current weather display using class currentTemp.
+    $(".currentDate").text(tempDate);
+
+    // Get temperature from object. No need to convert from kelvin since we added the imperial unit in the queryURL.
+    var tempCurrent = response.main.temp;
+    // Display in current weather display using class currentTemp.
+    $(".currentTemp").text("Temperature: " + tempCurrent + " °F");
+
+    // Get humidity from object.
+    var tempHumidity = response.main.humidity;
+    // Display in current weather display using class currentHumidity.
+    $(".currentHumidity").text("Humidity: " + tempHumidity + "%");
+
+    // Get wind speed from object.
+    var tempWindSpeed = response.wind.speed;
+    // Display in current weather display using class currentWindSpeed.
+    $(".currentWindSpeed").text("Wind Speed: " + tempWindSpeed + " MPH");
+
+    // Get heat index from object. In order to do that you need to get the coordinates from this object.
+    // Then use the coordinates to make another AJAX call to get the right object to get the heat index and 7 day forecast.
+    // var tempHeatIndex = 
+    // // Display in current weather display using class currentHeatIndex.
+    // $(".currentHeatIndex").text("Heat Index: " + tempHeatIndex);
+
+
+    });
+}
+
+// First thing to do is render any cities stored in local storage before you add more cities to the city search history list. 
 renderCitySearchHistory();
 
 // Create an add event listener for when user enters a city in the search box. Call the function addCitytoList to add the city to the citySearchHistoryList array.

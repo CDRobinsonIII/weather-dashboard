@@ -43,15 +43,35 @@
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-12 currentStats">
-                    <div>
-                        Current weather stats for the day.
+                    <!-- Try to convert the currentStats to DOM manipulation function. Start here: -->
+                    <div class ="row">
+                        <div class= "col-md-3 mt-4">
+                            <p class="currentCity"></p>
+                        </div>
+                        <div class= "col-md-3 mt-4">
+                            <p class="currentDate"></p>
+                        </div>
+                        <div class= "col-md-3">
+                            <img class="currentWeatherIcon"></img>
+                        </div>
                     </div>
+                    <div class ="row">
+                        <div class= "col-md-3">
+                            <p class="currentTemp"></p>
+                            <p class="currentHumidity"></p>
+                            <p class="currentWindSpeed"></p>
+                            <p class="currentHeatIndex"></p>
+                        </div>
+                    </div>             
                 </div>
+                <!-- Try to convert the currentStats to DOM manipulation function. End here: -->
+
                 <div class="col-md-12 fiveDayStats">
                     <div>
                         5 day weather stats. 
                     </div>
                 </div>
+
             </div>
         </div>
     </div>  
