@@ -148,13 +148,13 @@ function getCurrentWeather (addCitytoList) {
         console.log("The lat and long coordinates for: "+tempName+" are - Lat = "+lat+"; Long = "+lon+".");
 
         // Call the function to get the heat index and 5 day forecast and pass the lat and lon coordinates to it. 
-        getForecastWeather (lat, lon);
+        getHeatIndex (lat, lon);
 
     });
 }
 
 // Function to retrieve and display the heat index and the 5 day forecast.
-function getForecastWeather(lat, lon) {
+function getHeatIndex(lat, lon) {
 
     console.log("The lat and long coordinates inside 2nd AJAX call are - Lat = "+lat+"; Long = "+lon+".");
 
@@ -175,7 +175,30 @@ function getForecastWeather(lat, lon) {
         // Get heat index from object. 
         var tempHeatIndex = responseForecast.current.uvi;
         // Display in current weather display using class currentHeatIndex.
-        $(".currentHeatIndex").text("Heat Index: " + tempHeatIndex);
+        
+        $(".currentHeatIndex").empty();
+        $(".currentHeatIndex").text("Heat Index: ");
+
+
+        var addSpan = $("<span>").addClass("heat-index badge");
+        $(".currentHeatIndex").append(addSpan);
+
+        $(".heat-index").text(tempHeatIndex);
+
+        // Determine color of badge for the heat index. 
+        if (tempHeatIndex <3) {
+            // Less than 3 is green = favorable.
+            $(".heat-index").addClass("badge-success");
+        }
+            // Greater than 5 is red = severe.
+            else if (tempHeatIndex >5) {
+                $(".heat-index").addClass("badge-danger");
+            }
+            
+            // Greater between 2 and 6 (3-5) is yellow = moderate.
+            else {
+                $(".heat-index").addClass("badge-warning");
+            }
 
     });
 }
