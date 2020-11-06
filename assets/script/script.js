@@ -113,41 +113,69 @@ function getCurrentWeather (addCitytoList) {
     .then(function(response) {
         console.log(response);
 
-    // Get city name from object 
-    var tempName = response.name;
-    // Display in current weather display using class currentTemp.
-    $(".currentCity").text(tempName);
+        // Get city name from object 
+        var tempName = response.name;
+        // Display in current weather display using class currentTemp.
+        $(".currentCity").text(tempName);
 
-    // Use the moment object along with the format method to display the current day in the current weather section of dashboard.
-    $(".currentDate").text(moment().format('L'));
+        // Use the moment object along with the format method to display the current day in the current weather section of dashboard.
+        $(".currentDate").text(moment().format('L'));
 
-    // Get current weather condition icon from object.
-    var tempWeatherIconId = response.weather[0].icon;
-    var tempWeatherIconIdLink = `http://openweathermap.org/img/wn/${tempWeatherIconId}@2x.png`
-    // Display in current weather icon display using class currentWeatherIcon.
-    $(".currentWeatherIcon").attr("src",tempWeatherIconIdLink);
+        // Get current weather condition icon from object.
+        var tempWeatherIconId = response.weather[0].icon;
+        var tempWeatherIconIdLink = `http://openweathermap.org/img/wn/${tempWeatherIconId}@2x.png`
+        // Display in current weather icon display using class currentWeatherIcon.
+        $(".currentWeatherIcon").attr("src",tempWeatherIconIdLink);
 
-    // Get temperature from object. No need to convert from kelvin since we added the imperial unit in the queryURL.
-    var tempCurrent = response.main.temp;
-    // Display in current weather display using class currentTemp.
-    $(".currentTemp").text("Temperature: " + tempCurrent + " °F");
+        // Get temperature from object. No need to convert from kelvin since we added the imperial unit in the queryURL.
+        var tempCurrent = response.main.temp;
+        // Display in current weather display using class currentTemp.
+        $(".currentTemp").text("Temperature: " + tempCurrent + " °F");
 
-    // Get humidity from object.
-    var tempHumidity = response.main.humidity;
-    // Display in current weather display using class currentHumidity.
-    $(".currentHumidity").text("Humidity: " + tempHumidity + "%");
+        // Get humidity from object.
+        var tempHumidity = response.main.humidity;
+        // Display in current weather display using class currentHumidity.
+        $(".currentHumidity").text("Humidity: " + tempHumidity + "%");
 
-    // Get wind speed from object.
-    var tempWindSpeed = response.wind.speed;
-    // Display in current weather display using class currentWindSpeed.
-    $(".currentWindSpeed").text("Wind Speed: " + tempWindSpeed + " MPH");
+        // Get wind speed from object.
+        var tempWindSpeed = response.wind.speed;
+        // Display in current weather display using class currentWindSpeed.
+        $(".currentWindSpeed").text("Wind Speed: " + tempWindSpeed + " MPH");
 
-    // Get heat index from object. In order to do that you need to get the coordinates from this object.
-    // Then use the coordinates to make another AJAX call to get the right object to get the heat index and 7 day forecast.
-    // var tempHeatIndex = 
-    // // Display in current weather display using class currentHeatIndex.
-    // $(".currentHeatIndex").text("Heat Index: " + tempHeatIndex);
+        // Get lat and long coordinates from the response. We need them to make another AJAX call to get the heat index and 5 day forecast.
+        var lat = response.coord.lat;
+        var lon = response.coord.lon;
+        console.log("The lat and long coordinates for: "+tempName+" are - Lat = "+lat+"; Long = "+lon+".");
 
+        // Call the function to get the heat index and 5 day forecast and pass the lat and lon coordinates to it. 
+        getForecastWeather (lat, lon);
+
+    });
+}
+
+// Function to retrieve and display the heat index and the 5 day forecast.
+function getForecastWeather(lat, lon) {
+
+    console.log("The lat and long coordinates inside 2nd AJAX call are - Lat = "+lat+"; Long = "+lon+".");
+
+    // Create an AJAX call to get heat index and 5 day forecast based off of the lat and long coordinates. 
+    // Create new query URL to access to object that contains the required information.
+    // This is our API key. Add your own API key between the ""
+    var APIKey = "e26d4a663d05cc95479493f79a86a25d";
+
+    var queryURLForecast = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&appid=" + APIKey;
+    
+    $.ajax({
+      url: queryURLForecast,
+      method: "GET"
+    })
+    .then(function(responseForecast) {
+        console.log(responseForecast);
+
+        // Get heat index from object. 
+        var tempHeatIndex = responseForecast.current.uvi;
+        // Display in current weather display using class currentHeatIndex.
+        $(".currentHeatIndex").text("Heat Index: " + tempHeatIndex);
 
     });
 }
