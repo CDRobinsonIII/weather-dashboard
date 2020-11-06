@@ -56,9 +56,6 @@ if ($(".nameOfCity").val()!=="") {
         citySearchHistoryList = getStoredCities;
     }
 
-    // This clears the city search history so that we can append the new city to the list without adding continuously adding to the list. 
-    // $(".city-history").empty();
-
     // This console.log to to confirm that the city being entered is being accessed correctly.
     console.log("The typed in city is: "+$(".nameOfCity").val());
 
@@ -99,11 +96,13 @@ else {
 
 function getCurrentWeather (addCitytoList) {
 
-    // This is our API key. Add your own API key between the ""
+    // This is our API key. 
     var APIKey = "e26d4a663d05cc95479493f79a86a25d";
 
     // Here we are building the URL we need to query the database
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+addCitytoList+"&units=imperial&appid&appid=" + APIKey;
+
+    $(".fiveDayDashboard").html("");
 
     // We then created an AJAX call
     $.ajax({
@@ -123,7 +122,7 @@ function getCurrentWeather (addCitytoList) {
 
         // Get current weather condition icon from object.
         var tempWeatherIconId = response.weather[0].icon;
-        var tempWeatherIconIdLink = `http://openweathermap.org/img/wn/${tempWeatherIconId}@2x.png`
+        var tempWeatherIconIdLink = `http://openweathermap.org/img/wn/${tempWeatherIconId}@2x.png`;
         // Display in current weather icon display using class currentWeatherIcon.
         $(".currentWeatherIcon").attr("src",tempWeatherIconIdLink);
 
@@ -153,27 +152,27 @@ function getCurrentWeather (addCitytoList) {
     });
 }
 
-// Function to retrieve and display the heat index and the 5 day forecast.
+// Function to retrieve and display the heat index.
 function getHeatIndex(lat, lon) {
 
     console.log("The lat and long coordinates inside 2nd AJAX call are - Lat = "+lat+"; Long = "+lon+".");
 
-    // Create an AJAX call to get heat index and 5 day forecast based off of the lat and long coordinates. 
+    // Create an AJAX call to get heat index based off of the lat and long coordinates. 
     // Create new query URL to access to object that contains the required information.
-    // This is our API key. Add your own API key between the ""
+    // This is our API key. 
     var APIKey = "e26d4a663d05cc95479493f79a86a25d";
 
-    var queryURLForecast = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&appid=" + APIKey;
+    var queryURLForecast = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&appid=" + APIKey;
     
     $.ajax({
       url: queryURLForecast,
       method: "GET"
     })
-    .then(function(responseForecast) {
-        console.log(responseForecast);
+    .then(function(responseHeatIndexAndForecast) {
+        console.log(responseHeatIndexAndForecast);
 
         // Get heat index from object. 
-        var tempHeatIndex = responseForecast.current.uvi;
+        var tempHeatIndex = responseHeatIndexAndForecast.current.uvi;
         // Display in current weather display using class currentHeatIndex.
         
         $(".currentHeatIndex").empty();
@@ -199,8 +198,29 @@ function getHeatIndex(lat, lon) {
             else {
                 $(".heat-index").addClass("badge-warning");
             }
-
+        getFiveDayForecast(responseHeatIndexAndForecast);
     });
+}
+
+// Function to retrieve and display the 5 day forecast in the weather dashboard.
+
+function getFiveDayForecast (responseHeatIndexAndForecast) {
+    console.log("We are in the get five day forecast function: " + responseHeatIndexAndForecast);
+    for (i=1; i < 6; i++) {
+        var forecastDiv = $("<div>").addClass(`col-md-2 card text-center m-auto fiveDayForecast${i}`);
+        $(".fiveDayDashboard").append(forecastDiv);
+
+        var fiveDayDate = $("<p>").text((moment().add(i,'days').format('L')));
+        var fiveDayIconId = responseHeatIndexAndForecast.daily[i].weather[0].icon;
+        var fiveDayIconIdLink = `http://openweathermap.org/img/wn/${fiveDayIconId}@2x.png`;
+        // Display in current weather icon display using class currentWeatherIcon.
+        var fiveDayIconImg = $("<img>").attr("src",fiveDayIconIdLink);
+        var fiveDayTemp = $("<p>").text("Temp: " + responseHeatIndexAndForecast.daily[i].temp.day);
+        var fiveDayHumidity =  $("<p>").text("Temp: " + responseHeatIndexAndForecast.daily[i].humidity);
+
+        $(`.fiveDayForecast${i}`).append(fiveDayDate).append(fiveDayIconImg).append(fiveDayTemp).append(fiveDayHumidity);
+
+    } 
 }
 
 // First thing to do is render any cities stored in local storage before you add more cities to the city search history list. 
