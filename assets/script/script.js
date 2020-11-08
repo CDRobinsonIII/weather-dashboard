@@ -32,8 +32,9 @@ function renderCitySearchHistory () {
         }
     }
     
-    // If there are no cities in local storage, this else will end the function.
+    // If there are no cities in local storage.
     else {
+        // Call getLocation function to ask user for their location information in order to display their city weather in the dashboard.
         getLocation();
         return;
     }
@@ -42,6 +43,7 @@ function renderCitySearchHistory () {
 
 }
 
+// Call this getLocation function only when the weather dashboard is started for the first time or after local storage is cleared.
 function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
@@ -50,11 +52,14 @@ function getLocation() {
     }
 }
 
+// This function runs if the users clicks ok to get current location. 
 function showPosition(position) {
+
+    // Declare lat and lon variables.
     var currentLat=position.coords.latitude;
-    var currentLong=position.coords.longitude
-    alert("Latitude: " + currentLat + 
-    "<br>Longitude: " + currentLong);
+    var currentLong=position.coords.longitude;
+
+    // Call getCurrrentLocationWeather function to get city name attached to the lat and lon coordinates.
     getCurrentLocationWeather(currentLat,currentLong);
 }
 
@@ -111,6 +116,10 @@ else {
 
 }
 
+// Thus function uses the lat and lon coordinates from the user's current location to retrieve the city name via the open weather API.
+// As mentioned above this function is called only when the weather dashboard is started for the first time or after local storage is cleared.
+// The user only has to allow access to current location.
+
 function getCurrentLocationWeather (lat,lon) {
 
     var APIKey = "e26d4a663d05cc95479493f79a86a25d";
@@ -121,18 +130,24 @@ function getCurrentLocationWeather (lat,lon) {
       url: queryURLForecast,
       method: "GET"
     })
-    .then(function(response) {
-        console.log("Hello current location!");
 
-        console.log(response);
+    .then(function(response) {
+
+        // Declare city of the user's current location.
         var currentLocationCity = response.name;
+
+        // Push user's current city to the city search history list.
         citySearchHistoryList.push(currentLocationCity);
+
+        // Store city search history list to local storage.
         storageCitySearchHistory ();
+
+        // Render user's current city to the city search history list.
         renderCitySearchHistory ();
     });
 }
 
-        
+// This function gets the current weather for the city entered by the user or selected via the city search history list.        
 function getCurrentWeather (addCitytoList) {
 
     // This is our API key. 
@@ -143,7 +158,7 @@ function getCurrentWeather (addCitytoList) {
 
     $(".fiveDayDashboard").html("");
 
-    // We then created an AJAX call
+    // We then created an AJAX call.
     $.ajax({
       url: queryURL,
       method: "GET"
@@ -212,12 +227,12 @@ function getHeatIndex(lat, lon) {
 
         // Get heat index from object. 
         var tempHeatIndex = responseHeatIndexAndForecast.current.uvi;
-        // Display in current weather display using class currentHeatIndex.
-        
+    
+        // This clears out previously displayed heat indexes in order to show the correct heat index color.
         $(".currentHeatIndex").empty();
         $(".currentHeatIndex").text("Heat Index: ");
-
-
+       
+        // Display in current weather display using class currentHeatIndex.
         var addSpan = $("<span>").addClass("heat-index badge");
         $(".currentHeatIndex").append(addSpan);
 
@@ -237,26 +252,39 @@ function getHeatIndex(lat, lon) {
             else {
                 $(".heat-index").addClass("badge-warning");
             }
+
+        // Call getFiveDayForecast to display 5 day forecast in the weather dashboard.
         getFiveDayForecast(responseHeatIndexAndForecast);
     });
 }
 
 // Function to retrieve and display the 5 day forecast in the weather dashboard.
-
 function getFiveDayForecast (responseHeatIndexAndForecast) {
-    console.log("We are in the get five day forecast function: " + responseHeatIndexAndForecast);
+
+    // Run loop to generate the forecast divs for the next 5 days. 
     for (i=1; i < 6; i++) {
+
+        // Create div tag to append five day forecast information to. 
         var forecastDiv = $("<div>").addClass(`col-md-2 card text-center m-auto fiveDayForecast${i}`);
         $(".fiveDayDashboard").append(forecastDiv);
 
+        // Create p tag to display date for forecast div.
         var fiveDayDate = $("<p>").text((moment().add(i,'days').format('L')));
+
+        // Declare weather icon variable for the forecast div.
         var fiveDayIconId = responseHeatIndexAndForecast.daily[i].weather[0].icon;
         var fiveDayIconIdLink = `http://openweathermap.org/img/wn/${fiveDayIconId}@2x.png`;
-        // Display in current weather icon display using class currentWeatherIcon.
+
+        // Create image tag for forecast div to display weather icon.
         var fiveDayIconImg = $("<img>").attr("src",fiveDayIconIdLink);
+
+        // Create p tag to dispay the temperate for the forecast div.
         var fiveDayTemp = $("<p>").text("Temp: " + responseHeatIndexAndForecast.daily[i].temp.day);
+
+        // Create p tag to dispay the humidity for the forecast div.
         var fiveDayHumidity =  $("<p>").text("Humidity: " + responseHeatIndexAndForecast.daily[i].humidity + "%");
 
+        // Append the date, icon, temperature, and humidity tags to the forecast div. 
         $(`.fiveDayForecast${i}`).append(fiveDayDate).append(fiveDayIconImg).append(fiveDayTemp).append(fiveDayHumidity);
 
     } 
