@@ -78,9 +78,6 @@ if ($(".nameOfCity").val()!=="") {
         citySearchHistoryList = getStoredCities;
     }
 
-    // This console.log to to confirm that the city being entered is being accessed correctly.
-    console.log("The typed in city is: "+$(".nameOfCity").val());
-
     // Create a var to store the name of the city typed in by the user.
     var addCitytoList = $(".nameOfCity").val();
 
@@ -88,7 +85,6 @@ if ($(".nameOfCity").val()!=="") {
     citySearchHistoryList.push(addCitytoList);
 
     var positionInArray = (citySearchHistoryList.length-1);
-    console.log("This is the index of the citySearchHistoryList array: " +positionInArray);
 
     // Create an button tag to attach the new city to. To append to the city history list.
     var cityHistoryListBtn = $('<button>');
@@ -98,9 +94,6 @@ if ($(".nameOfCity").val()!=="") {
 
     // Append the city name entered by the user to the city history list. 
     $(".city-history").append(buttonCity);
-
-    // Test to see if how long 
-    console.log("This is the city that way added to the city search history list array. " +citySearchHistoryList[positionInArray]);
 
     // Clear the search box of the entered city name. 
     $(".nameOfCity").val("");
@@ -164,7 +157,6 @@ function getCurrentWeather (addCitytoList) {
       method: "GET"
     })
     .then(function(response) {
-        console.log(response);
 
         // Get city name from object 
         var tempName = response.name;
@@ -198,7 +190,6 @@ function getCurrentWeather (addCitytoList) {
         // Get lat and long coordinates from the response. We need them to make another AJAX call to get the heat index and 5 day forecast.
         var lat = response.coord.lat;
         var lon = response.coord.lon;
-        console.log("The lat and long coordinates for: "+tempName+" are - Lat = "+lat+"; Long = "+lon+".");
 
         // Call the function to get the heat index and 5 day forecast and pass the lat and lon coordinates to it. 
         getHeatIndex (lat, lon);
@@ -208,8 +199,6 @@ function getCurrentWeather (addCitytoList) {
 
 // Function to retrieve and display the heat index.
 function getHeatIndex(lat, lon) {
-
-    console.log("The lat and long coordinates inside 2nd AJAX call are - Lat = "+lat+"; Long = "+lon+".");
 
     // Create an AJAX call to get heat index based off of the lat and long coordinates. 
     // Create new query URL to access to object that contains the required information.
@@ -223,7 +212,6 @@ function getHeatIndex(lat, lon) {
       method: "GET"
     })
     .then(function(responseHeatIndexAndForecast) {
-        console.log(responseHeatIndexAndForecast);
 
         // Get heat index from object. 
         var tempHeatIndex = responseHeatIndexAndForecast.current.uvi;
