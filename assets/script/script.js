@@ -34,11 +34,28 @@ function renderCitySearchHistory () {
     
     // If there are no cities in local storage, this else will end the function.
     else {
+        getLocation();
         return;
     }
     // Call getCurrentWeather function to render last city in the city search list array to the current weather dashboard.
     getCurrentWeather (citySearchHistoryList[citySearchHistoryList.length-1]);
 
+}
+
+function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+    alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+    var currentLat=position.coords.latitude;
+    var currentLong=position.coords.longitude
+    alert("Latitude: " + currentLat + 
+    "<br>Longitude: " + currentLong);
+    getCurrentLocationWeather(currentLat,currentLong);
 }
 
 // Function to an add city to the citySearchHistoryList array. 
@@ -94,6 +111,28 @@ else {
 
 }
 
+function getCurrentLocationWeather (lat,lon) {
+
+    var APIKey = "e26d4a663d05cc95479493f79a86a25d";
+
+    var queryURLForecast = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=imperial&appid=" + APIKey;
+    
+    $.ajax({
+      url: queryURLForecast,
+      method: "GET"
+    })
+    .then(function(response) {
+        console.log("Hello current location!");
+
+        console.log(response);
+        var currentLocationCity = response.name;
+        citySearchHistoryList.push(currentLocationCity);
+        storageCitySearchHistory ();
+        renderCitySearchHistory ();
+    });
+}
+
+        
 function getCurrentWeather (addCitytoList) {
 
     // This is our API key. 
@@ -216,7 +255,7 @@ function getFiveDayForecast (responseHeatIndexAndForecast) {
         // Display in current weather icon display using class currentWeatherIcon.
         var fiveDayIconImg = $("<img>").attr("src",fiveDayIconIdLink);
         var fiveDayTemp = $("<p>").text("Temp: " + responseHeatIndexAndForecast.daily[i].temp.day);
-        var fiveDayHumidity =  $("<p>").text("Temp: " + responseHeatIndexAndForecast.daily[i].humidity);
+        var fiveDayHumidity =  $("<p>").text("Humidity: " + responseHeatIndexAndForecast.daily[i].humidity + "%");
 
         $(`.fiveDayForecast${i}`).append(fiveDayDate).append(fiveDayIconImg).append(fiveDayTemp).append(fiveDayHumidity);
 
