@@ -43,7 +43,7 @@ This was accomplished by:
 
 ## What I Learned
 
-While working on this project, I learned how to use AJAX to access weather information from the Open Weather API. I also learned how to use getLocation to get the user's current location. This wasn't a requirement for the project. However, I didn't like that the weather dashboard was blank when it was first launched. So I didn't a little research and figured out how retrieve the lat and long for the user's current location. I then had to take the lat and long and send it to the Open Weather API to get the name attached to the lat and long. Because this project was built from scratch, it required a lot of psuedo-coding. Pseudo-coding helped tremendously as I worked through coding each of the different functions and features of the weather-dashboard.
+While working on this project, I learned how to use AJAX to access weather information from the Open Weather API. I also learned how to use getLocation to get the user's current location. This wasn't a requirement for the project. However, I didn't like that the weather dashboard was blank when it was first launched. So I did a little research and figured out how retrieve the lat and long for the user's current location. I then had to take the lat and long and send it to the Open Weather API to get the name of the city attached to the lat and long. Because this project was built from scratch, it required a lot of pseudo-coding. Pseudo-coding helped tremendously as I worked through coding each of the different functions and features of the weather-dashboard.
 
 ![Here is a screenshot of the weather dashboard.](./assets/images/ScreenShot_Weather_Dashboard.jpg)
 
